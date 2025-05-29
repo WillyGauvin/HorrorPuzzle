@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interactable.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -71,11 +72,73 @@ void AHorrorCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AHorrorCharacter::Interact(const FInputActionValue& Value)
+{
+	if (LookAtActor)
+	{
+		LookAtActor->InteractWith_Implementation(this);
+	}
+}
+
+void AHorrorCharacter::InteractTrace()
+{
+	FHitResult Hit;
+	FVector Start = CameraComponent->GetComponentLocation();
+	FVector End = Start + CameraComponent->GetForwardVector() * 300.0f;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this); // Ignore the actor performing the trace
+
+	FCollisionObjectQueryParams ObjectQueryParams;
+	ObjectQueryParams.ObjectTypesToQuery =
+		FCollisionObjectQueryParams::InitType(ECC_WorldDynamic) |
+		FCollisionObjectQueryParams::InitType(ECC_WorldStatic) |
+		FCollisionObjectQueryParams::InitType(ECC_Pawn);  // Exclude custom Sphere type
+
+	bool bHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams, QueryParams); //Might need to change channel from ECC_Visibility. Depending on what kind of actor we use
+
+	bool StoppedLookingAt = true;
+
+	if (bHit)
+	{
+		// A hit occurred
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor)
+		{
+			if (AInteractable* Interactable = Cast<AInteractable>(HitActor))
+			{
+				// This covers the case where the player is looking at an interactable and then in the next frame is looking at another interactable.
+				if (LookAtActor != Interactable)
+				{
+					if (LookAtActor != nullptr)
+					{
+						LookAtActor->StopLookAt();
+					}
+					LookAtActor = Interactable;
+
+					LookAtActor->StartLookAt(Cast<APlayerController>(Controller));
+				}
+				StoppedLookingAt = false;
+			}
+		}
+	}
+
+	if (StoppedLookingAt)
+	{
+		if (LookAtActor != nullptr)
+		{
+			LookAtActor->StopLookAt();
+			LookAtActor = nullptr;
+		}
+	}
+}
+
+
 // Called every frame
 void AHorrorCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	InteractTrace();
 }
 
 void AHorrorCharacter::NotifyControllerChanged()
@@ -107,6 +170,9 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHorrorCharacter::Look);
+
+		//Interacting
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AHorrorCharacter::Interact);
 	}
 }
 

@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class AInteractable;
 
 UCLASS()
 class HORROR_API AHorrorCharacter : public ACharacter
@@ -51,6 +52,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InteractAction;
 #pragma endregion
 
 protected:
@@ -59,6 +62,11 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Interact(const FInputActionValue& Value);
+
+
+	void InteractTrace();
+	AInteractable* LookAtActor = nullptr;
 
 	// APawn interface
 
@@ -66,6 +74,8 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 	// End of APawn interface
+
+
 
 public:	
 	// Called every frame
