@@ -32,8 +32,10 @@ public:
 
 	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	bool bIsOpen = false;
 
+	UFUNCTION(BlueprintCallable)
 	void ToggleDoor();
 
 	UFUNCTION(BlueprintImplementableEvent)
