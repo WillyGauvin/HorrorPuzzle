@@ -37,6 +37,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* MonitorMappingContext;
 #pragma endregion
 
 #pragma region Actions
@@ -54,6 +57,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ExitAction;
 #pragma endregion
 
 protected:
@@ -63,7 +69,7 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
-
+	void Exit(const FInputActionValue& Value);
 
 	void InteractTrace();
 	AInteractable* LookAtActor = nullptr;
@@ -75,7 +81,10 @@ protected:
 
 	// End of APawn interface
 
-
+	UFUNCTION(BlueprintCallable)
+	void SwitchToDefaultControls();
+	UFUNCTION(BlueprintCallable)
+	void SwitchToMonitorControls();
 
 public:	
 	// Called every frame
@@ -85,5 +94,11 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return ArmsMesh; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void EnterMonitor(FTransform ViewLocation);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExitMonitor();
 
 };

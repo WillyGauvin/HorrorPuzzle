@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Interactable.h"
+#include "InputMappingContext.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -43,7 +44,6 @@ AHorrorCharacter::AHorrorCharacter()
 void AHorrorCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AHorrorCharacter::Move(const FInputActionValue& Value)
@@ -78,6 +78,11 @@ void AHorrorCharacter::Interact(const FInputActionValue& Value)
 	{
 		LookAtActor->InteractWith_Implementation(this);
 	}
+}
+
+void AHorrorCharacter::Exit(const FInputActionValue& Value)
+{
+	ExitMonitor();
 }
 
 void AHorrorCharacter::InteractTrace()
@@ -173,6 +178,33 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Interacting
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AHorrorCharacter::Interact);
+
+		//Exit Monitor
+		EnhancedInputComponent->BindAction(ExitAction, ETriggerEvent::Completed, this, &AHorrorCharacter::Exit);
+	}
+}
+
+void AHorrorCharacter::SwitchToDefaultControls()
+{
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		{
+			Subsystem->RemoveMappingContext(MonitorMappingContext);
+			Subsystem->AddMappingContext(DefaultMappingContext, 1);
+		}
+	}
+}
+
+void AHorrorCharacter::SwitchToMonitorControls()
+{
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		{
+			Subsystem->RemoveMappingContext(DefaultMappingContext);
+			Subsystem->AddMappingContext(MonitorMappingContext, 1);
+		}
 	}
 }
 
