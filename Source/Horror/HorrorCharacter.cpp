@@ -76,7 +76,7 @@ void AHorrorCharacter::Interact(const FInputActionValue& Value)
 {
 	if (LookAtActor)
 	{
-		LookAtActor->InteractWith_Implementation(this);
+		LookAtActor->InteractWith(this);
 	}
 }
 
