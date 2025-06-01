@@ -2,6 +2,7 @@
 
 
 #include "Door.h"
+#include "HorrorCharacter.h"
 
 ADoor::ADoor()
 {
@@ -25,12 +26,26 @@ void ADoor::Tick(float DeltaTime)
 FString ADoor::InteractWith_Implementation(AActor* otherActor)
 {
 	//ToggleDoor();
+	if (otherActor->IsA(AHorrorCharacter::StaticClass()))
+	{
+		ToggleDoor(EInteractType::Player);
+	}
+
 	return Super::InteractWith_Implementation(otherActor);
 }
 
-void ADoor::ToggleDoor()
+void ADoor::ToggleDoor(EInteractType interactType)
 {
-	(bIsOpen) ? Close() : Open();
-
-	bIsOpen = !bIsOpen;
+	switch (interactType)
+	{
+	case EInteractType::ControlRoom:
+		(bIsOpen) ? Close() : Open();
+		bIsOpen = !bIsOpen;
+		break;
+	case EInteractType::Player:
+		(bIsOpen) ? CloseManually() : OpenManually();
+		break;
+	case EInteractType::Monkey:
+		break;
+	}
 }

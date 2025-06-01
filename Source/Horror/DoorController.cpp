@@ -14,7 +14,7 @@ FString ADoorController::InteractWith_Implementation(AActor* otherActor)
 {
 	if (LinkedDoor)
 	{
-		LinkedDoor->ToggleDoor();
+		LinkedDoor->ToggleDoor(EInteractType::ControlRoom);
 	}
 
 	return Super::InteractWith_Implementation(otherActor);

@@ -6,6 +6,14 @@
 #include "Interactable.h"
 #include "Door.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EInteractType : uint8
+{
+	ControlRoom,
+	Player,
+	Monkey,
+};
 /**
  * 
  */
@@ -32,17 +40,23 @@ public:
 
 	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsOpen = false;
 
 	UFUNCTION(BlueprintCallable)
-	void ToggleDoor();
+	void ToggleDoor(EInteractType interactType);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Open();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Close();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenManually();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CloseManually();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float OpenPosZ;
