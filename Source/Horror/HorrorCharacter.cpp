@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "Interactable.h"
 #include "InputMappingContext.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -83,6 +84,11 @@ void AHorrorCharacter::Interact(const FInputActionValue& Value)
 void AHorrorCharacter::Exit(const FInputActionValue& Value)
 {
 	ExitMonitor();
+}
+
+void AHorrorCharacter::Whistle(const FInputActionValue& Value)
+{
+	PlayWhistle();
 }
 
 void AHorrorCharacter::InteractTrace()
@@ -181,6 +187,9 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Exit Monitor
 		EnhancedInputComponent->BindAction(ExitAction, ETriggerEvent::Completed, this, &AHorrorCharacter::Exit);
+
+		//Whistle
+		EnhancedInputComponent->BindAction(WhistleAction, ETriggerEvent::Completed, this, &AHorrorCharacter::Whistle);
 	}
 }
 

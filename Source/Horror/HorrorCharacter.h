@@ -60,7 +60,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ExitAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* WhistleAction;
 #pragma endregion
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
+	USoundBase* WhistleCue;
 
 protected:
 	// Called when the game starts or when spawned
@@ -70,6 +76,10 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
 	void Exit(const FInputActionValue& Value);
+	void Whistle(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayWhistle();
 
 	void InteractTrace();
 	AInteractable* LookAtActor = nullptr;
