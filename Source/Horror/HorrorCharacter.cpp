@@ -91,6 +91,10 @@ void AHorrorCharacter::Whistle(const FInputActionValue& Value)
 	PlayWhistle();
 }
 
+void AHorrorCharacter::Tablet(const FInputActionValue& Value)
+{
+}
+
 void AHorrorCharacter::InteractTrace()
 {
 	FHitResult Hit;
@@ -190,6 +194,10 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		//Whistle
 		EnhancedInputComponent->BindAction(WhistleAction, ETriggerEvent::Completed, this, &AHorrorCharacter::Whistle);
+
+		//Tablet
+		EnhancedInputComponent->BindAction(TabletAction, ETriggerEvent::Started, this, &AHorrorCharacter::EnterTablet);
+		EnhancedInputComponent->BindAction(TabletAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ExitTablet);
 	}
 }
 
@@ -216,4 +224,3 @@ void AHorrorCharacter::SwitchToMonitorControls()
 		}
 	}
 }
-

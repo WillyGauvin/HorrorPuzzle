@@ -63,6 +63,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* WhistleAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* TabletAction;
 #pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
@@ -77,6 +80,7 @@ protected:
 	void Interact(const FInputActionValue& Value);
 	void Exit(const FInputActionValue& Value);
 	void Whistle(const FInputActionValue& Value);
+	void Tablet(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayWhistle();
@@ -110,5 +114,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ExitMonitor();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnterTablet();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ExitTablet();
 
 };
