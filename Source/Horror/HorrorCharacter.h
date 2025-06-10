@@ -68,6 +68,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* TabletAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* RunAction;
+
+#pragma region SwitchCamera
 	//SwitchCamera
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SwitchCameraAction0;
@@ -98,8 +102,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SwitchCameraAction9;
+#pragma endregion SwitchCamera
 
-#pragma endregion
+#pragma endregion Actions
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
 	USoundBase* WhistleCue;
@@ -113,6 +118,8 @@ protected:
 	void Interact(const FInputActionValue& Value);
 	void Exit(const FInputActionValue& Value);
 	void Whistle(const FInputActionValue& Value);
+	void StartRun();
+	void EndRun();
 	void SwitchCamera0();
 	void SwitchCamera1();
 	void SwitchCamera2();
@@ -144,6 +151,11 @@ protected:
 	void SwitchToDefaultControls();
 	UFUNCTION(BlueprintCallable)
 	void SwitchToMonitorControls();
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float WalkSpeed = 400.0f;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float RunSpeed = 650.0f;
 
 public:	
 	// Called every frame

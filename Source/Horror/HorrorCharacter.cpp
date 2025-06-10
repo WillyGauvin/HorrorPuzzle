@@ -10,6 +10,7 @@
 #include "InputMappingContext.h"
 #include "Kismet/GameplayStatics.h"
 #include "InputAction.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -46,6 +47,7 @@ AHorrorCharacter::AHorrorCharacter()
 void AHorrorCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	EndRun();
 }
 
 void AHorrorCharacter::Move(const FInputActionValue& Value)
@@ -90,6 +92,16 @@ void AHorrorCharacter::Exit(const FInputActionValue& Value)
 void AHorrorCharacter::Whistle(const FInputActionValue& Value)
 {
 	PlayWhistle();
+}
+
+void AHorrorCharacter::StartRun()
+{
+	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+}
+
+void AHorrorCharacter::EndRun()
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 #pragma region SwitchCamera
@@ -241,6 +253,10 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		//Tablet
 		EnhancedInputComponent->BindAction(TabletAction, ETriggerEvent::Started, this, &AHorrorCharacter::EnterTablet);
 		EnhancedInputComponent->BindAction(TabletAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ExitTablet);
+
+		//Run
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &AHorrorCharacter::StartRun);
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &AHorrorCharacter::EndRun);
 
 		//Switch Cameras
 		EnhancedInputComponent->BindAction(SwitchCameraAction1, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera0);
