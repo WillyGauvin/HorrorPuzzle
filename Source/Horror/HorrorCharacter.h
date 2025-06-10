@@ -12,6 +12,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class AInteractable;
+struct FInputActionInstance;
 
 UCLASS()
 class HORROR_API AHorrorCharacter : public ACharacter
@@ -66,6 +67,38 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* TabletAction;
+
+	//SwitchCamera
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction6;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction7;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction8;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SwitchCameraAction9;
+
 #pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
@@ -80,7 +113,19 @@ protected:
 	void Interact(const FInputActionValue& Value);
 	void Exit(const FInputActionValue& Value);
 	void Whistle(const FInputActionValue& Value);
-	void Tablet(const FInputActionValue& Value);
+	void SwitchCamera0();
+	void SwitchCamera1();
+	void SwitchCamera2();
+	void SwitchCamera3();
+	void SwitchCamera4();
+	void SwitchCamera5();
+	void SwitchCamera6();
+	void SwitchCamera7();
+	void SwitchCamera8();
+	void SwitchCamera9();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SwitchCameraIndex(int CameraIndex);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayWhistle();

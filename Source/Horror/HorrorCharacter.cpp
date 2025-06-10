@@ -9,6 +9,7 @@
 #include "Interactable.h"
 #include "InputMappingContext.h"
 #include "Kismet/GameplayStatics.h"
+#include "InputAction.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -91,9 +92,51 @@ void AHorrorCharacter::Whistle(const FInputActionValue& Value)
 	PlayWhistle();
 }
 
-void AHorrorCharacter::Tablet(const FInputActionValue& Value)
+#pragma region SwitchCamera
+
+void AHorrorCharacter::SwitchCamera0()
 {
+	SwitchCameraIndex(0);
 }
+void AHorrorCharacter::SwitchCamera1()
+{
+	SwitchCameraIndex(1);
+}
+void AHorrorCharacter::SwitchCamera2()
+{
+	SwitchCameraIndex(2);
+}
+void AHorrorCharacter::SwitchCamera3()
+{
+	SwitchCameraIndex(3);
+}
+void AHorrorCharacter::SwitchCamera4()
+{
+	SwitchCameraIndex(4);
+}
+void AHorrorCharacter::SwitchCamera5()
+{
+	SwitchCameraIndex(5);
+}
+void AHorrorCharacter::SwitchCamera6()
+{
+	SwitchCameraIndex(6);
+}
+void AHorrorCharacter::SwitchCamera7()
+{
+	SwitchCameraIndex(7);
+}
+void AHorrorCharacter::SwitchCamera8()
+{
+	SwitchCameraIndex(8);
+}
+void AHorrorCharacter::SwitchCamera9()
+{
+	SwitchCameraIndex(9);
+}
+
+#pragma endregion
+
 
 void AHorrorCharacter::InteractTrace()
 {
@@ -198,6 +241,18 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		//Tablet
 		EnhancedInputComponent->BindAction(TabletAction, ETriggerEvent::Started, this, &AHorrorCharacter::EnterTablet);
 		EnhancedInputComponent->BindAction(TabletAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ExitTablet);
+
+		//Switch Cameras
+		EnhancedInputComponent->BindAction(SwitchCameraAction1, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera0);
+		EnhancedInputComponent->BindAction(SwitchCameraAction2, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera1);
+		EnhancedInputComponent->BindAction(SwitchCameraAction3, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera2);
+		EnhancedInputComponent->BindAction(SwitchCameraAction4, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera3);
+		EnhancedInputComponent->BindAction(SwitchCameraAction5, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera4);
+		EnhancedInputComponent->BindAction(SwitchCameraAction6, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera5);
+		EnhancedInputComponent->BindAction(SwitchCameraAction7, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera6);
+		EnhancedInputComponent->BindAction(SwitchCameraAction8, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera7);
+		EnhancedInputComponent->BindAction(SwitchCameraAction9, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera8);
+		EnhancedInputComponent->BindAction(SwitchCameraAction0, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera9);
 	}
 }
 
