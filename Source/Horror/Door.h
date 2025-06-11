@@ -63,4 +63,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ClosePosZ;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float LiftedPosZ;
 };

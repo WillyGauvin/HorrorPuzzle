@@ -26,6 +26,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<UUserWidget> InteractionWidgetClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UUserWidget* ActiveInteractionWidget;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
