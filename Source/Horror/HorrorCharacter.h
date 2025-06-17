@@ -13,6 +13,7 @@ class UInputAction;
 struct FInputActionValue;
 class AInteractable;
 struct FInputActionInstance;
+class AHidingSpot;
 
 UCLASS()
 class HORROR_API AHorrorCharacter : public ACharacter
@@ -41,6 +42,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* MonitorMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* HidingMappingContext;
 #pragma endregion
 
 #pragma region Actions
@@ -104,6 +108,8 @@ public:
 	class UInputAction* SwitchCameraAction9;
 #pragma endregion SwitchCamera
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* PeekAction;
 #pragma endregion Actions
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
@@ -132,6 +138,11 @@ protected:
 	void SwitchCamera9();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void Peek();
+	UFUNCTION(BlueprintImplementableEvent)
+	void UnPeek();
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void SwitchCameraIndex(int CameraIndex);
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -149,8 +160,12 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void SwitchToDefaultControls();
+
 	UFUNCTION(BlueprintCallable)
 	void SwitchToMonitorControls();
+
+	UFUNCTION(BlueprintCallable)
+	void SwitchToHidingControls();
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float WalkSpeed = 400.0f;
@@ -177,5 +192,20 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ExitTablet();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnterHiding();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ExitHiding();
+
+	UFUNCTION(BlueprintCallable)
+	void InteractWithHiding(AHidingSpot* hidingSpot);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AHidingSpot* HidingSpot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsHiding = false;
 
 };

@@ -269,6 +269,10 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(SwitchCameraAction8, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera7);
 		EnhancedInputComponent->BindAction(SwitchCameraAction9, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera8);
 		EnhancedInputComponent->BindAction(SwitchCameraAction0, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera9);
+
+		//Peeking
+		EnhancedInputComponent->BindAction(PeekAction, ETriggerEvent::Started, this, &AHorrorCharacter::Peek);
+		EnhancedInputComponent->BindAction(PeekAction, ETriggerEvent::Completed, this, &AHorrorCharacter::UnPeek);
 	}
 }
 
@@ -279,6 +283,7 @@ void AHorrorCharacter::SwitchToDefaultControls()
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
 		{
 			Subsystem->RemoveMappingContext(MonitorMappingContext);
+			Subsystem->RemoveMappingContext(HidingMappingContext);
 			Subsystem->AddMappingContext(DefaultMappingContext, 1);
 		}
 	}
@@ -294,4 +299,30 @@ void AHorrorCharacter::SwitchToMonitorControls()
 			Subsystem->AddMappingContext(MonitorMappingContext, 1);
 		}
 	}
+}
+
+void AHorrorCharacter::SwitchToHidingControls()
+{
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		{
+			Subsystem->RemoveMappingContext(DefaultMappingContext);
+			Subsystem->AddMappingContext(HidingMappingContext, 1);
+		}
+	}
+}
+
+void AHorrorCharacter::InteractWithHiding(AHidingSpot* hidingSpot)
+{
+	if (HidingSpot == nullptr)
+	{
+		HidingSpot = hidingSpot;
+		EnterHiding();
+	}
+	else
+	{
+		ExitHiding();
+	}
+
 }
