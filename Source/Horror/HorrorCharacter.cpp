@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Perception/AIPerceptionSystem.h"
 #include "Perception/AIPerceptionComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -93,17 +94,27 @@ void AHorrorCharacter::Exit(const FInputActionValue& Value)
 
 void AHorrorCharacter::Whistle(const FInputActionValue& Value)
 {
-	PlayWhistle();
+	if (bCanWhistle && Stamina - WhistleStaminaCost > 0.0f)
+	{
+		PlayWhistle();
+		Stamina = FMath::Max(0.0f, Stamina - WhistleStaminaCost);
+		StaminaRegenCooldownRemaining = StaminaRegenCooldown;
+	}
 }
 
 void AHorrorCharacter::StartRun()
 {
-	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	if (Stamina > 0.0f)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+		bIsRunning = true;
+	}
 }
 
 void AHorrorCharacter::EndRun()
 {
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	bIsRunning = false;
 }
 
 #pragma region SwitchCamera
@@ -211,6 +222,52 @@ void AHorrorCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	InteractTrace();
+
+	if (Stamina <= 0.0f && bIsRunning)
+	{
+		EndRun();
+	}
+
+	if (bIsRunning)
+	{
+		StaminaRegenCooldownRemaining = StaminaRegenCooldown;
+		//GEngine->AddOnScreenDebugMessage(
+		//	-1,                      // Unique key (use -1 for new message)
+		//	1.0f,                    // Duration in seconds
+		//	FColor::Yellow,          // Text color
+		//	FString::Printf(TEXT("StaminaRegenCoolDownRemaining: %f"), StaminaRegenCooldownRemaining)
+		//);
+
+		//GEngine->AddOnScreenDebugMessage(
+		//	-1,
+		//	5.0f,
+		//	FColor::Red,
+		//	FString::Printf(TEXT("Stamina: %f"), Stamina)
+		//);
+
+		Stamina = FMath::Max(0.0f, Stamina - DeltaTime);
+	}
+
+	if (StaminaRegenCooldownRemaining > 0.0f)
+	{
+		StaminaRegenCooldownRemaining -= DeltaTime;
+		//GEngine->AddOnScreenDebugMessage(
+		//	-1,
+		//	5.0f,
+		//	FColor::Yellow,
+		//	FString::Printf(TEXT("StaminaRegenCooldownRemaining: %f"), StaminaRegenCooldownRemaining)
+		//);
+	}
+	else
+	{
+		Stamina = FMath::Min(Stamina + DeltaTime * StaminaRegenRate, MaxStamina);
+		//GEngine->AddOnScreenDebugMessage(
+		//	-1,
+		//	5.0f,
+		//	FColor::Green,
+		//	FString::Printf(TEXT("Stamina: %f"), Stamina)
+		//);
+	}
 }
 
 void AHorrorCharacter::NotifyControllerChanged()

@@ -149,6 +149,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayWhistle();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanWhistle = true;
+
 	void InteractTrace();
 	AInteractable* LookAtActor = nullptr;
 
@@ -172,6 +175,32 @@ protected:
 	float WalkSpeed = 400.0f;
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float RunSpeed = 650.0f;
+
+
+#pragma region Stamina
+
+	float bIsRunning = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float MaxStamina = 5.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float Stamina = 5.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float StaminaRegenRate = 1.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float StaminaRegenCooldown = 5.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float StaminaRegenCooldownRemaining = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float WhistleStaminaCost = 2.0f;
+
+#pragma endregion
+
 
 public:	
 	// Called every frame
