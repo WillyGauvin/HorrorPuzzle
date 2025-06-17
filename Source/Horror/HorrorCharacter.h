@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Perception/AISightTargetInterface.h"
 #include "HorrorCharacter.generated.h"
 
 class UCameraComponent;
@@ -16,7 +17,7 @@ struct FInputActionInstance;
 class AHidingSpot;
 
 UCLASS()
-class HORROR_API AHorrorCharacter : public ACharacter
+class HORROR_API AHorrorCharacter : public ACharacter, public IAISightTargetInterface
 {
 	GENERATED_BODY()
 
@@ -207,5 +208,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsHiding = false;
+
+	private:
+		virtual UAISense_Sight::EVisibilityResult CanBeSeenFrom(
+			const FCanBeSeenFromContext& Context,
+			FVector& OutSeenLocation,
+			int32& OutNumberOfLoSChecksPerformed,
+			int32& OutNumberOfAsyncLosCheckRequested,
+			float& OutSightStrength,
+			int32* UserData = nullptr,
+			const FOnPendingVisibilityQueryProcessedDelegate* Delegate = nullptr
+		) override;
 
 };

@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "InputAction.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/AIPerceptionSystem.h"
+#include "Perception/AIPerceptionComponent.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -325,4 +327,37 @@ void AHorrorCharacter::InteractWithHiding(AHidingSpot* hidingSpot)
 		ExitHiding();
 	}
 
+}
+
+UAISense_Sight::EVisibilityResult AHorrorCharacter::CanBeSeenFrom(const FCanBeSeenFromContext& Context, FVector& OutSeenLocation, int32& OutNumberOfLoSChecksPerformed, int32& OutNumberOfAsyncLosCheckRequested, float& OutSightStrength, int32* UserData, const FOnPendingVisibilityQueryProcessedDelegate* Delegate)
+{
+	/* If I add a mesh to the character use this */
+	//FVector SightTargetLocation = GetMesh()->GetSocketLocation("head");
+
+	FVector SightTargetLocation = GetActorLocation() + FVector(0.0f,0.0f,60.0f);
+	FHitResult HitResult;
+
+	bool HadBlockingHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Context.ObserverLocation,
+		SightTargetLocation,
+		ECC_Visibility,
+		FCollisionQueryParams(FName("Name_AILineOfSight"), false, Context.IgnoreActor)
+	);
+
+	AActor* HitActor = Cast<AActor>(HitResult.GetActor());
+
+	if (!HadBlockingHit || (IsValid(HitActor) && HitActor->IsOwnedBy(this)))
+	{
+		OutSeenLocation = HadBlockingHit ? HitResult.ImpactPoint : SightTargetLocation;
+		OutNumberOfLoSChecksPerformed = 1;
+		OutNumberOfAsyncLosCheckRequested = 0;
+		OutSightStrength = 1;
+		return UAISense_Sight::EVisibilityResult::Visible;
+	}
+
+	OutNumberOfLoSChecksPerformed = 1;
+	OutNumberOfAsyncLosCheckRequested = 0;
+	OutSightStrength = 0;
+	return UAISense_Sight::EVisibilityResult::NotVisible;
 }
