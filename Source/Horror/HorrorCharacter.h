@@ -188,13 +188,7 @@ protected:
 	float Stamina = 5.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float StaminaRegenRate = 1.0f;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float StaminaRegenCooldown = 5.0f;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float StaminaRegenCooldownRemaining = 0.0f;
+	float StaminaRegenRate = 0.5f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float WhistleStaminaCost = 2.0f;

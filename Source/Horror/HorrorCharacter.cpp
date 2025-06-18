@@ -98,7 +98,6 @@ void AHorrorCharacter::Whistle(const FInputActionValue& Value)
 	{
 		PlayWhistle();
 		Stamina = FMath::Max(0.0f, Stamina - WhistleStaminaCost);
-		StaminaRegenCooldownRemaining = StaminaRegenCooldown;
 	}
 }
 
@@ -230,7 +229,7 @@ void AHorrorCharacter::Tick(float DeltaTime)
 
 	if (bIsRunning)
 	{
-		StaminaRegenCooldownRemaining = StaminaRegenCooldown;
+		Stamina = FMath::Max(0.0f, Stamina - DeltaTime);
 		//GEngine->AddOnScreenDebugMessage(
 		//	-1,                      // Unique key (use -1 for new message)
 		//	1.0f,                    // Duration in seconds
@@ -244,29 +243,10 @@ void AHorrorCharacter::Tick(float DeltaTime)
 		//	FColor::Red,
 		//	FString::Printf(TEXT("Stamina: %f"), Stamina)
 		//);
-
-		Stamina = FMath::Max(0.0f, Stamina - DeltaTime);
-	}
-
-	if (StaminaRegenCooldownRemaining > 0.0f)
-	{
-		StaminaRegenCooldownRemaining -= DeltaTime;
-		//GEngine->AddOnScreenDebugMessage(
-		//	-1,
-		//	5.0f,
-		//	FColor::Yellow,
-		//	FString::Printf(TEXT("StaminaRegenCooldownRemaining: %f"), StaminaRegenCooldownRemaining)
-		//);
 	}
 	else
 	{
-		Stamina = FMath::Min(Stamina + DeltaTime * StaminaRegenRate, MaxStamina);
-		//GEngine->AddOnScreenDebugMessage(
-		//	-1,
-		//	5.0f,
-		//	FColor::Green,
-		//	FString::Printf(TEXT("Stamina: %f"), Stamina)
-		//);
+		Stamina = FMath::Min(MaxStamina, Stamina + DeltaTime * StaminaRegenRate);
 	}
 }
 
