@@ -35,6 +35,17 @@ protected:
 	UStaticMeshComponent* Frame;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsBroken;
+
+	bool TryBreakDoor();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BreakDoor();//Handles setting bIsBroken, Widget Image, and any animations for breaking.
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void FixDoor(); //Handles setting bIsBroken, Widget Image, and any quick time events for fixing.
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
