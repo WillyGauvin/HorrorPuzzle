@@ -312,6 +312,9 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		//Peeking
 		EnhancedInputComponent->BindAction(PeekAction, ETriggerEvent::Started, this, &AHorrorCharacter::Peek);
 		EnhancedInputComponent->BindAction(PeekAction, ETriggerEvent::Completed, this, &AHorrorCharacter::UnPeek);
+
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &AHorrorCharacter::ChargeBanana);
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ThrowBanana);
 	}
 }
 

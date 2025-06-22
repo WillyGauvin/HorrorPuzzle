@@ -111,10 +111,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* PeekAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ThrowAction;
 #pragma endregion Actions
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
 	USoundBase* WhistleCue;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -142,6 +146,12 @@ protected:
 	void Peek();
 	UFUNCTION(BlueprintImplementableEvent)
 	void UnPeek();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChargeBanana();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ThrowBanana();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void SwitchCameraIndex(int CameraIndex);
