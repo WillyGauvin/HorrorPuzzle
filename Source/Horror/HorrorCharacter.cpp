@@ -319,6 +319,9 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &AHorrorCharacter::ChargeBanana);
 		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ThrowBanana);
+
+		EnhancedInputComponent->BindAction(Inventory, ETriggerEvent::Started, this, &AHorrorCharacter::ToggleInventory, true);
+		EnhancedInputComponent->BindAction(Inventory, ETriggerEvent::Completed, this, &AHorrorCharacter::ToggleInventory, false);
 	}
 }
 
@@ -330,6 +333,7 @@ void AHorrorCharacter::SwitchToDefaultControls()
 		{
 			Subsystem->RemoveMappingContext(MonitorMappingContext);
 			Subsystem->RemoveMappingContext(HidingMappingContext);
+			Subsystem->RemoveMappingContext(InventoryMappingContext);
 			Subsystem->AddMappingContext(DefaultMappingContext, 1);
 		}
 	}
@@ -355,6 +359,18 @@ void AHorrorCharacter::SwitchToHidingControls()
 		{
 			Subsystem->RemoveMappingContext(DefaultMappingContext);
 			Subsystem->AddMappingContext(HidingMappingContext, 1);
+		}
+	}
+}
+
+void AHorrorCharacter::SwitchToInventoryControls()
+{
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+		{
+			Subsystem->RemoveMappingContext(DefaultMappingContext);
+			Subsystem->AddMappingContext(InventoryMappingContext, 1);
 		}
 	}
 }

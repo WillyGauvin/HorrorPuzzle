@@ -35,4 +35,7 @@ public:
 	bool AddItem(TSubclassOf<AItem> itemClass);
 
 	bool RemoveItem(TSubclassOf<AItem> itemClass);
+
+	UFUNCTION(BlueprintCallable)
+	bool SelectItem(TSubclassOf<AItem> itemClass);
 };

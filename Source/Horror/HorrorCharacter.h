@@ -48,6 +48,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* HidingMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* InventoryMappingContext;
 #pragma endregion
 
 #pragma region Actions
@@ -116,6 +119,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ThrowAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Inventory;
 #pragma endregion Actions
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
@@ -156,6 +162,9 @@ protected:
 	void ThrowBanana();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void ToggleInventory(bool toggle);
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void SwitchCameraIndex(int CameraIndex);
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -182,6 +191,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void SwitchToHidingControls();
+
+	UFUNCTION(BlueprintCallable)
+	void SwitchToInventoryControls();
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float WalkSpeed = 400.0f;

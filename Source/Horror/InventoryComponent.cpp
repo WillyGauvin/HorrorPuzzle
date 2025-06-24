@@ -2,6 +2,7 @@
 
 
 #include "InventoryComponent.h"
+#include "Horror/HorrorCharacter.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -66,6 +67,19 @@ bool UInventoryComponent::RemoveItem(TSubclassOf<AItem> itemClass)
 	else
 	{
 		return false;
+	}
+}
+
+bool UInventoryComponent::SelectItem(TSubclassOf<AItem> itemClass)
+{
+	if (!DoesHaveItem(itemClass))
+	{
+		return false;
+	}
+
+	if (AHorrorCharacter* Character = Cast<AHorrorCharacter>(GetOwner()))
+	{
+			
 	}
 }
 
