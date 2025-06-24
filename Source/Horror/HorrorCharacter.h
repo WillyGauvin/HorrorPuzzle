@@ -264,6 +264,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryComponent* InventoryComponent;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void HoldItem(AItem* ItemToHold);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DropItem();
+
 
 #pragma endregion Items
 

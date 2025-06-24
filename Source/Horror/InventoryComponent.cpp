@@ -79,7 +79,10 @@ bool UInventoryComponent::SelectItem(TSubclassOf<AItem> itemClass)
 
 	if (AHorrorCharacter* Character = Cast<AHorrorCharacter>(GetOwner()))
 	{
-			
+		AItem* Item = Cast<AItem>(GetWorld()->SpawnActor(itemClass));
+		Character->HoldItem(Item);
+		return true;
 	}
+	return false;
 }
 
