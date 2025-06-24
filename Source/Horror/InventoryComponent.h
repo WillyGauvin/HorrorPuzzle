@@ -26,11 +26,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AItem> Banana;
+	TMap<TSubclassOf<AItem>, int> Items;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AItem> NoiseMaker;
+	bool IsRoomForItem(TSubclassOf<AItem> itemClass);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AItem> TranqDart;
+	bool DoesHaveItem(TSubclassOf<AItem> itemClass);
+
+	bool AddItem(TSubclassOf<AItem> itemClass);
+
+	bool RemoveItem(TSubclassOf<AItem> itemClass);
 };

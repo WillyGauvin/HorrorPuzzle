@@ -15,6 +15,8 @@ struct FInputActionValue;
 class AInteractable;
 struct FInputActionInstance;
 class AHidingSpot;
+class AItem;
+class UInventoryComponent;
 
 UCLASS()
 class HORROR_API AHorrorCharacter : public ACharacter, public IAISightTargetInterface
@@ -241,6 +243,20 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsHiding = false;
+
+#pragma region Items
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AItem* HeldItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UInventoryComponent* InventoryComponent;
+
+
+#pragma endregion Items
+
+
+
 
 	private:
 		virtual UAISense_Sight::EVisibilityResult CanBeSeenFrom(

@@ -10,6 +10,7 @@ UInventoryComponent::UInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+
 	// ...
 }
 
@@ -30,5 +31,41 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+bool UInventoryComponent::IsRoomForItem(TSubclassOf<AItem> itemClass)
+{
+	return (Items[itemClass] < itemClass->GetDefaultObject<AItem>()->MaxInInventory);
+}
+
+bool UInventoryComponent::DoesHaveItem(TSubclassOf<AItem> itemClass)
+{
+	return (Items[itemClass] > 0);
+}
+
+bool UInventoryComponent::AddItem(TSubclassOf<AItem> itemClass)
+{
+	if (IsRoomForItem(itemClass))
+	{
+		Items[itemClass]++;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UInventoryComponent::RemoveItem(TSubclassOf<AItem> itemClass)
+{
+	if (DoesHaveItem(itemClass))
+	{
+		Items[itemClass]--;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 

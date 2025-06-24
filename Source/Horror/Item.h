@@ -32,4 +32,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* InventoryIcon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> CanPickupWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> CannotPickupWidgetClass;
+
+	virtual void StartLookAt_Implementation(APlayerController* PlayerController) override;
+
+	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 };

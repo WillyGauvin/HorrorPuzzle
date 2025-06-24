@@ -14,6 +14,8 @@
 #include "Perception/AIPerceptionSystem.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Horror/InventoryComponent.h"
+#include "Horror/Item.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -44,6 +46,8 @@ AHorrorCharacter::AHorrorCharacter()
 	ArmsMesh->bCastDynamicShadow = false;
 	ArmsMesh->CastShadow = false;
 	ArmsMesh->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
 
 // Called when the game starts or when spawned
