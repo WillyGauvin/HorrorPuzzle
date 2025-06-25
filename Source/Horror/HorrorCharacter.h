@@ -155,11 +155,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UnPeek();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void ChargeBanana();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void ThrowBanana();
+	void HoldItemAction();
+	void ReleaseItemAction();
+	void CancelItemAction();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ToggleInventory(bool toggle);
@@ -264,10 +262,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryComponent* InventoryComponent;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void HoldItem(AItem* ItemToHold);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DropItem();
 
 

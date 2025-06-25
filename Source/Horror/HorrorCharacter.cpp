@@ -163,6 +163,30 @@ void AHorrorCharacter::SwitchCamera9()
 	SwitchCameraIndex(9);
 }
 
+void AHorrorCharacter::HoldItemAction()
+{
+	if (HeldItem)
+	{
+		HeldItem->HoldAction();
+	}
+}
+
+void AHorrorCharacter::ReleaseItemAction()
+{
+	if (HeldItem)
+	{
+		HeldItem->ReleaseAction();
+	}
+}
+
+void AHorrorCharacter::CancelItemAction()
+{
+	if (HeldItem)
+	{
+		HeldItem->CancelAction();
+	}
+}
+
 #pragma endregion
 
 
@@ -317,8 +341,8 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(PeekAction, ETriggerEvent::Started, this, &AHorrorCharacter::Peek);
 		EnhancedInputComponent->BindAction(PeekAction, ETriggerEvent::Completed, this, &AHorrorCharacter::UnPeek);
 
-		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &AHorrorCharacter::ChargeBanana);
-		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ThrowBanana);
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &AHorrorCharacter::HoldItemAction);
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Completed, this, &AHorrorCharacter::ReleaseItemAction);
 
 		EnhancedInputComponent->BindAction(Inventory, ETriggerEvent::Started, this, &AHorrorCharacter::ToggleInventory, true);
 		EnhancedInputComponent->BindAction(Inventory, ETriggerEvent::Completed, this, &AHorrorCharacter::ToggleInventory, false);

@@ -7,6 +7,7 @@
 #include "Horror/Item.h"
 #include "InventoryComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FInventoryChangedDelegate, TSubclassOf<AItem>, itemClass, int, numInInventory);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class HORROR_API UInventoryComponent : public UActorComponent
@@ -34,8 +35,15 @@ public:
 
 	bool AddItem(TSubclassOf<AItem> itemClass);
 
+	UFUNCTION(BlueprintCallable)
 	bool RemoveItem(TSubclassOf<AItem> itemClass);
 
 	UFUNCTION(BlueprintCallable)
 	bool SelectItem(TSubclassOf<AItem> itemClass);
+
+	UFUNCTION(BlueprintCallable)
+	int GetNumItems(TSubclassOf<AItem> itemClass);
+
+	UPROPERTY(BlueprintAssignable, Category = "Test")
+	FInventoryChangedDelegate OnInventoryChangedDelegate;
 };

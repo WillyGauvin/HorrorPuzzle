@@ -49,6 +49,7 @@ bool UInventoryComponent::AddItem(TSubclassOf<AItem> itemClass)
 	if (IsRoomForItem(itemClass))
 	{
 		Items[itemClass]++;
+		OnInventoryChangedDelegate.Broadcast(itemClass, Items[itemClass]);
 		return true;
 	}
 	else
@@ -62,6 +63,7 @@ bool UInventoryComponent::RemoveItem(TSubclassOf<AItem> itemClass)
 	if (DoesHaveItem(itemClass))
 	{
 		Items[itemClass]--;
+		OnInventoryChangedDelegate.Broadcast(itemClass, Items[itemClass]);
 		return true;
 	}
 	else
@@ -84,5 +86,10 @@ bool UInventoryComponent::SelectItem(TSubclassOf<AItem> itemClass)
 		return true;
 	}
 	return false;
+}
+
+int UInventoryComponent::GetNumItems(TSubclassOf<AItem> itemClass)
+{
+	return Items[itemClass];
 }
 

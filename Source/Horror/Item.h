@@ -27,6 +27,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CancelAction();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Pickup();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Drop();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxInInventory;
 
