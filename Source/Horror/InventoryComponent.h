@@ -9,6 +9,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FInventoryChangedDelegate, TSubclassOf<AItem>, itemClass, int, numInInventory);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLoadInventoryDelegate);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class HORROR_API UInventoryComponent : public UActorComponent
 {
@@ -44,6 +46,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetNumItems(TSubclassOf<AItem> itemClass);
 
-	UPROPERTY(BlueprintAssignable, Category = "Test")
+	UFUNCTION(BlueprintCallable)
+	void LoadInventory(TMap<TSubclassOf<AItem>, int> loadItems);
+
+	UPROPERTY(BlueprintAssignable, Category = "Delegates")
 	FInventoryChangedDelegate OnInventoryChangedDelegate;
+
 };

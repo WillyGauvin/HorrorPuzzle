@@ -41,6 +41,11 @@ bool UInventoryComponent::IsRoomForItem(TSubclassOf<AItem> itemClass)
 
 bool UInventoryComponent::DoesHaveItem(TSubclassOf<AItem> itemClass)
 {
+	if (itemClass == nullptr)
+	{
+		return false;
+	}
+
 	return (Items[itemClass] > 0);
 }
 
@@ -81,6 +86,10 @@ bool UInventoryComponent::SelectItem(TSubclassOf<AItem> itemClass)
 
 	if (AHorrorCharacter* Character = Cast<AHorrorCharacter>(GetOwner()))
 	{
+		if (Character->HeldItem != nullptr)
+		{
+			return false;
+		}
 		AItem* Item = Cast<AItem>(GetWorld()->SpawnActor(itemClass));
 		Character->HoldItem(Item);
 		return true;
@@ -91,5 +100,15 @@ bool UInventoryComponent::SelectItem(TSubclassOf<AItem> itemClass)
 int UInventoryComponent::GetNumItems(TSubclassOf<AItem> itemClass)
 {
 	return Items[itemClass];
+}
+
+void UInventoryComponent::LoadInventory(TMap<TSubclassOf<AItem>, int> loadItems)
+{
+	Items = loadItems;
+
+	for (auto& Elem : Items)
+	{
+		OnInventoryChangedDelegate.Broadcast(Elem.Key, Elem.Value);
+	}
 }
 
