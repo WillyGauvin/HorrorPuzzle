@@ -7,6 +7,10 @@
 #include "Door.generated.h"
 
 
+class UBoxComponent;
+class UPaperSpriteComponent;
+class UPaperSprite;
+
 UENUM(BlueprintType)
 enum class EInteractType : uint8
 {
@@ -22,6 +26,8 @@ class HORROR_API ADoor : public AInteractable
 {
 	GENERATED_BODY()
 
+public:
+
 	ADoor();
 
 protected:
@@ -34,18 +40,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* Frame;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UBoxComponent* InteractionBox;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPaperSpriteComponent* MinimapIcon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPaperSprite* OpenSprite;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPaperSprite* ClosedSprite;
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsBroken;
-
-	bool TryBreakDoor();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void BreakDoor();//Handles setting bIsBroken, Widget Image, and any animations for breaking.
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void FixDoor(); //Handles setting bIsBroken, Widget Image, and any quick time events for fixing.
-
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -55,7 +61,7 @@ public:
 	bool bIsOpen = false;
 
 	UFUNCTION(BlueprintCallable)
-	void ToggleDoor(EInteractType interactType);
+	virtual void ToggleDoor(EInteractType interactType);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Open();
@@ -63,18 +69,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Close();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OpenManually();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void CloseManually();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector OpenPos;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float OpenPosZ;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ClosePosZ;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float LiftedPosZ;
+	FVector ClosePos;
 };
