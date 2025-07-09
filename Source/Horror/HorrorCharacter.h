@@ -198,9 +198,9 @@ protected:
 	void SwitchToInventoryControls();
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float WalkSpeed = 400.0f;
+	float WalkSpeed = 250.0f;
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float RunSpeed = 650.0f;
+	float RunSpeed = 450.0f;
 
 
 #pragma region Stamina
