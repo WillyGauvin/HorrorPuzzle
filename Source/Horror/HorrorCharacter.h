@@ -83,6 +83,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* RunAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* CrouchAction;
+
 #pragma region SwitchCamera
 	//SwitchCamera
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -153,6 +156,12 @@ protected:
 	void SwitchCamera7();
 	void SwitchCamera8();
 	void SwitchCamera9();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartCrouch();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndCrouch();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Peek();

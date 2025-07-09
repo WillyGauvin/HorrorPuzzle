@@ -163,6 +163,7 @@ void AHorrorCharacter::SwitchCamera9()
 	SwitchCameraIndex(9);
 }
 
+
 void AHorrorCharacter::HoldItemAction()
 {
 	if (HeldItem)
@@ -326,6 +327,10 @@ void AHorrorCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		//Run
 		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &AHorrorCharacter::StartRun);
 		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &AHorrorCharacter::EndRun);
+
+		//Crouch
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AHorrorCharacter::StartCrouch);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AHorrorCharacter::EndCrouch);
 
 		//Switch Cameras
 		EnhancedInputComponent->BindAction(SwitchCameraAction1, ETriggerEvent::Completed, this, &AHorrorCharacter::SwitchCamera0);
