@@ -16,6 +16,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Horror/InventoryComponent.h"
 #include "Horror/Item.h"
+#include "EnemyCharacter.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -198,6 +199,7 @@ void AHorrorCharacter::InteractTrace()
 	FVector End = Start + CameraComponent->GetForwardVector() * 300.0f;
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this); // Ignore the actor performing the trace
+	QueryParams.AddIgnoredActor(UGameplayStatics::GetActorOfClass(this, AEnemyCharacter::StaticClass()));
 
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.ObjectTypesToQuery =
