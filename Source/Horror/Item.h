@@ -7,16 +7,18 @@
 #include "Item.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class HORROR_API AItem : public AInteractable
 {
 	GENERATED_BODY()
-	
+
 public:
 
 	AItem();
+
+	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void HoldAction();
@@ -27,11 +29,23 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CancelAction();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Pickup();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	virtual void Pickup_Implementation();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Drop();
+
+	virtual void Drop_Implementation();
+
+	UFUNCTION()
+	void CheckVelocity();
+
+	FTimerHandle CheckVelocityHandle;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bIsBeingHeld = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxInInventory;
@@ -48,4 +62,7 @@ public:
 	virtual void StartLookAt_Implementation(APlayerController* PlayerController) override;
 
 	virtual FString InteractWith_Implementation(AActor* otherActor) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector InteractionBillboardOffset;
 };

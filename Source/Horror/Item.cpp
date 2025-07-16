@@ -5,10 +5,48 @@
 #include "Horror/HorrorCharacter.h"
 #include "Horror/InventoryComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/BoxComponent.h"
+#include "Components/BillboardComponent.h"
 
 AItem::AItem()
 {
+	OuterBillboard->SetUsingAbsoluteRotation(true);
+	OuterBillboard->SetUsingAbsoluteLocation(true);
+
+	InnerBillboard->SetUsingAbsoluteRotation(true);
+	InnerBillboard->SetUsingAbsoluteLocation(true);
 }
+
+void AItem::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	FVector ActorLocation = InteractionBox->GetComponentLocation();
+	FVector BillboardLocation = ActorLocation + InteractionBillboardOffset;
+
+	OuterBillboard->SetWorldLocation(BillboardLocation);
+	InnerBillboard->SetWorldLocation(BillboardLocation);
+}
+
+void AItem::Pickup_Implementation()
+{
+	SetInteractability(false);
+}
+
+void AItem::Drop_Implementation()
+{
+	GetWorldTimerManager().SetTimer(CheckVelocityHandle, this, &AItem::CheckVelocity, 0.2f, true);
+}
+
+void AItem::CheckVelocity()
+{
+	if (GetVelocity().IsNearlyZero())
+	{
+		SetInteractability(true);
+		GetWorldTimerManager().ClearTimer(CheckVelocityHandle);
+	}
+}
+
 
 void AItem::StartLookAt_Implementation(APlayerController* PlayerController)
 {

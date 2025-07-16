@@ -3,11 +3,14 @@
 
 #include "HidingSpot.h"
 #include "HorrorCharacter.h"
+#include "Components/BoxComponent.h"
 
 AHidingSpot::AHidingSpot()
 {
-	Object = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HidingSpot"));
-	Object->SetupAttachment(RootComponent);
+	HidingSpotMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HidingSpotMesh"));
+	HidingSpotMesh->SetupAttachment(RootComponent);
+
+	InteractionBox->SetupAttachment(HidingSpotMesh);
 }
 
 void AHidingSpot::BeginPlay()

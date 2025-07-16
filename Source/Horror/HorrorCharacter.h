@@ -231,7 +231,7 @@ protected:
 #pragma endregion
 
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -287,15 +287,15 @@ public:
 
 
 
-	private:
-		virtual UAISense_Sight::EVisibilityResult CanBeSeenFrom(
-			const FCanBeSeenFromContext& Context,
-			FVector& OutSeenLocation,
-			int32& OutNumberOfLoSChecksPerformed,
-			int32& OutNumberOfAsyncLosCheckRequested,
-			float& OutSightStrength,
-			int32* UserData = nullptr,
-			const FOnPendingVisibilityQueryProcessedDelegate* Delegate = nullptr
-		) override;
+private:
+	virtual UAISense_Sight::EVisibilityResult CanBeSeenFrom(
+		const FCanBeSeenFromContext& Context,
+		FVector& OutSeenLocation,
+		int32& OutNumberOfLoSChecksPerformed,
+		int32& OutNumberOfAsyncLosCheckRequested,
+		float& OutSightStrength,
+		int32* UserData = nullptr,
+		const FOnPendingVisibilityQueryProcessedDelegate* Delegate = nullptr
+	) override;
 
 };

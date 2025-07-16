@@ -8,7 +8,7 @@
 class AItem;
 
 /**
- * 
+ *
  */
 UCLASS()
 class HORROR_API AItemSpawner : public AActor

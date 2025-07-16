@@ -9,13 +9,13 @@
 
 class UChildActorComponent;
 /**
- * 
+ *
  */
 UCLASS()
 class HORROR_API AControllableDoor : public ADoor
 {
 	GENERATED_BODY()
-	
+
 public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

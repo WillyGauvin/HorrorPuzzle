@@ -21,7 +21,7 @@
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Create Spring Arm
@@ -207,7 +207,7 @@ void AHorrorCharacter::InteractTrace()
 		FCollisionObjectQueryParams::InitType(ECC_WorldStatic) |
 		FCollisionObjectQueryParams::InitType(ECC_Pawn);  // Exclude custom Sphere type
 
-	bool bHit = GetWorld()->LineTraceSingleByObjectType(Hit, Start, End, ObjectQueryParams, QueryParams); //Might need to change channel from ECC_Visibility. Depending on what kind of actor we use
+	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_GameTraceChannel1, QueryParams); //Might need to change channel from ECC_Visibility. Depending on what kind of actor we use
 
 	bool StoppedLookingAt = true;
 
@@ -427,7 +427,7 @@ UAISense_Sight::EVisibilityResult AHorrorCharacter::CanBeSeenFrom(const FCanBeSe
 	/* If I add a mesh to the character use this */
 	//FVector SightTargetLocation = GetMesh()->GetSocketLocation("head");
 
-	FVector SightTargetLocation = GetActorLocation() + FVector(0.0f,0.0f,60.0f);
+	FVector SightTargetLocation = GetActorLocation() + FVector(0.0f, 0.0f, 60.0f);
 	FHitResult HitResult;
 
 	bool HadBlockingHit = GetWorld()->LineTraceSingleByChannel(

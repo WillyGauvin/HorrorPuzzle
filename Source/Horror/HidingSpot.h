@@ -10,13 +10,13 @@
 class AHorrorCharacter;
 
 /**
- * 
+ *
  */
 UCLASS()
 class HORROR_API AHidingSpot : public AInteractable
 {
 	GENERATED_BODY()
-	
+
 	AHidingSpot();
 
 protected:
@@ -24,7 +24,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* Object;
+	UStaticMeshComponent* HidingSpotMesh;
 
 public:
 	// Called every frame
