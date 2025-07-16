@@ -39,7 +39,7 @@ AInteractable::AInteractable()
 	OuterBillboard->SetVisibility(false);
 	OuterBillboard->SetHiddenInGame(false);
 	OuterBillboard->SetSprite(OuterImage);
-	OuterBillboard->SetRelativeScale3D(FVector(0.01f, 0.01f, 0.01f));
+	OuterBillboard->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 
 	InnerInteractSphere = CreateDefaultSubobject<USphereComponent>(TEXT("InnerSphere"));
 	InnerInteractSphere->SetupAttachment(InteractionBox);
@@ -55,7 +55,7 @@ AInteractable::AInteractable()
 	InnerBillboard->SetVisibility(false);
 	InnerBillboard->SetHiddenInGame(false);
 	InnerBillboard->SetSprite(InnerImage);
-	InnerBillboard->SetRelativeScale3D(FVector(0.01f, 0.01f, 0.01f));
+	InnerBillboard->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 
 
 

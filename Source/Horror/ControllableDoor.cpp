@@ -67,12 +67,14 @@ void AControllableDoor::ToggleDoor(EInteractType interactType)
 			if (bIsOpen)
 			{
 				Close();
+				InteractionWidgetClass = CloseDoorWidgetClass;
 			}
 			else
 			{
 				if (!TryBreakDoor())
 				{
 					Open();
+					InteractionWidgetClass = OpenDoorWidgetClass;
 				}
 			}
 		}
@@ -84,7 +86,16 @@ void AControllableDoor::ToggleDoor(EInteractType interactType)
 		}
 		else
 		{
-			(bIsOpen) ? CloseManually() : OpenManually();
+			if (bIsOpen)
+			{
+				InteractionWidgetClass = OpenDoorWidgetClass;
+				CloseManually();
+			}
+			else
+			{
+				OpenManually();
+			}
+			ReloadWidget();
 		}
 		break;
 	case EInteractType::Monkey:
