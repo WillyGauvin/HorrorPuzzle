@@ -3,9 +3,9 @@ This first person horror game began as a learning project to sharpen my skills i
 
 ## Premise
 
-You're a Veterinarian recently hired at a chimpanzee sanctuary. You've accidentally marked a new chimpanzee as having a clean bill of health, when in reality it has been infected with rabies.
+You're a Veterinarian recently hired at a chimpanzee sanctuary. You've released a new chimpanzee into the enclosure after accidentaly marking it as having a clean bill of health, when in reality it has been infected with an unknown pathogen that has made it extremely hostile.
 
-Your goal is to get this chimp back into its enclosure using a series of poorly maintained remotely controlled doorways.
+Your goal is to get this chimp back into a secluded enclosure using a series of poorly maintained remotely controlled doorways.
 
 ## Development
 
