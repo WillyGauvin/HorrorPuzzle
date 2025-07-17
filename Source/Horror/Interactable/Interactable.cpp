@@ -27,8 +27,8 @@ AInteractable::AInteractable()
 	InteractionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	InteractionBox->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECollisionResponse::ECR_Block); //ECC_GameTraceChannel 1 is custom trace channel called Interaction
 
-	OuterImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/InteractOuter.InteractOuter")));
-	InnerImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/InteractInner.InteractInner")));
+	OuterImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/InteractionIcons/InteractOuter.InteractOuter")));
+	InnerImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/InteractionIcons/InteractInner.InteractInner")));
 
 	OuterInteractSphere = CreateDefaultSubobject<USphereComponent>(TEXT("OuterSphere"));
 	OuterInteractSphere->SetupAttachment(InteractionBox);
