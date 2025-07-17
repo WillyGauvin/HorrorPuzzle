@@ -1,9 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Project Includes
+#include "Horror/Interactable/Interactable.h"
 
+//Engine Includes
 #include "CoreMinimal.h"
-#include "Interactable.h"
 #include "Door.generated.h"
 
 
@@ -11,6 +13,7 @@ class UBoxComponent;
 class UPaperSpriteComponent;
 class UPaperSprite;
 
+//Enum type for future case that Monkey can open doors.
 UENUM(BlueprintType)
 enum class EInteractType : uint8
 {
@@ -41,6 +44,14 @@ protected:
 	UStaticMeshComponent* Frame;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UChildActorComponent* FrontInteractionLocation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UChildActorComponent* BackInteractionLocation;
+
+#pragma region MiniMap
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UPaperSpriteComponent* MinimapIcon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -49,17 +60,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UPaperSprite* ClosedSprite;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UChildActorComponent* FrontInteractionLocation;
+#pragma endregion
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UChildActorComponent* BackInteractionLocation;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual FString InteractWith_Implementation(AActor* otherActor) override;
-
+#pragma region Opening/Closing
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsOpen = false;
 
@@ -77,9 +84,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector ClosePos;
+#pragma endregion
 
-
-	//Interaction
+#pragma region Interaction
+	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> OpenDoorWidgetClass;
@@ -101,8 +109,8 @@ public:
 
 	void SetBillboardLocations(AActor* OtherActor);
 
-	bool bIsOverlapping = false;
 	AActor* CurrentOverlappingActor = nullptr;
+#pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bDebug = false;

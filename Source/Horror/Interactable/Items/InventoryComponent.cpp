@@ -2,7 +2,7 @@
 
 
 #include "InventoryComponent.h"
-#include "Horror/HorrorCharacter.h"
+#include "Horror/Characters/HorrorCharacter.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -10,9 +10,6 @@ UInventoryComponent::UInventoryComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-
-	// ...
 }
 
 
@@ -20,9 +17,6 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 
@@ -30,8 +24,6 @@ void UInventoryComponent::BeginPlay()
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 bool UInventoryComponent::IsRoomForItem(TSubclassOf<AItem> itemClass)
@@ -86,10 +78,12 @@ bool UInventoryComponent::SelectItem(TSubclassOf<AItem> itemClass)
 
 	if (AHorrorCharacter* Character = Cast<AHorrorCharacter>(GetOwner()))
 	{
+		//Cannot select an item if Character is already holding one
 		if (Character->HeldItem != nullptr)
 		{
 			return false;
 		}
+		//Spawn Item and tell character to hold said item
 		AItem* Item = Cast<AItem>(GetWorld()->SpawnActor(itemClass));
 		Character->HoldItem(Item);
 		return true;

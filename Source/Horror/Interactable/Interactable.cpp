@@ -1,13 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+//Project Includes
 #include "Interactable.h"
+#include "Horror/Characters/HorrorCharacter.h"
+
+//Engine Includes
 #include "Components/WidgetComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/BillboardComponent.h"
+
 #include "Kismet/GameplayStatics.h"
-#include "HorrorCharacter.h"
 
 
 // Sets default values
@@ -16,12 +19,13 @@ AInteractable::AInteractable()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Create box that triggers all interaction logic
 	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractionBox"));
 	InteractionBox->SetupAttachment(RootComponent);
 	InteractionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	InteractionBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	InteractionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	InteractionBox->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECollisionResponse::ECR_Block);
+	InteractionBox->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECollisionResponse::ECR_Block); //ECC_GameTraceChannel 1 is custom trace channel called Interaction
 
 	OuterImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/InteractOuter.InteractOuter")));
 	InnerImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/InteractInner.InteractInner")));
@@ -81,21 +85,19 @@ FString AInteractable::InteractWith_Implementation(AActor* otherActor)
 
 void AInteractable::StartLookAt_Implementation(APlayerController* PlayerController)
 {
+	//Reset Widget in case of widget changes between interactions
 	if (ActiveInteractionWidget)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, "TakenOff");
 		ActiveInteractionWidget->RemoveFromParent();
 		ActiveInteractionWidget = nullptr;
 	}
 
 	if (InteractionWidgetClass && PlayerController)
 	{
-		// Delegate UI creation to the controller
 		ActiveInteractionWidget = CreateWidget<UUserWidget>(PlayerController, InteractionWidgetClass);
 
 		if (ActiveInteractionWidget)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, "PutOn");
 			ActiveInteractionWidget->AddToViewport();
 		}
 	}
@@ -105,17 +107,14 @@ void AInteractable::ReloadWidget()
 {
 	if (ActiveInteractionWidget)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, "TakenOff");
 		ActiveInteractionWidget->RemoveFromParent();
 		ActiveInteractionWidget = nullptr;
 	}
 
-	// Delegate UI creation to the controller
 	ActiveInteractionWidget = CreateWidget<UUserWidget>(UGameplayStatics::GetPlayerController(GetWorld(), 0), InteractionWidgetClass);
 
 	if (ActiveInteractionWidget)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, "PutOn");
 		ActiveInteractionWidget->AddToViewport();
 	}
 }
@@ -145,6 +144,7 @@ void AInteractable::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponen
 		}
 		else if (OverlappedComponent == InnerInteractSphere)
 		{
+			//Don't want to see outer Billboard when we enter within inner billboards range
 			OuterBillboard->SetVisibility(false);
 			InnerBillboard->SetVisibility(true);
 		}

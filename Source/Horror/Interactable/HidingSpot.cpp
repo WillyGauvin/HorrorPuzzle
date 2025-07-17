@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+//Project Includes
 #include "HidingSpot.h"
-#include "HorrorCharacter.h"
+#include "Horror/Characters/HorrorCharacter.h"
+
+//Engine Includes
 #include "Components/BoxComponent.h"
 
 AHidingSpot::AHidingSpot()

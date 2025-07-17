@@ -2,14 +2,18 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+//Project Includes
 #include "Door.h"
+
+//Engine Includes
+#include "CoreMinimal.h"
 #include "ControllableDoor.generated.h"
 
 
 class UChildActorComponent;
 /**
- *
+ * Controllable Doors are controllable from Monitors. Logic inherited from base class ADoor is used for controlling from Monitors.
+ * Open/Close Manually functions used for in person interaction.
  */
 UCLASS()
 class HORROR_API AControllableDoor : public ADoor
@@ -18,10 +22,6 @@ class HORROR_API AControllableDoor : public ADoor
 
 public:
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UChildActorComponent* DoorWidgetLocation;
-
-public:
 
 	AControllableDoor();
 
@@ -32,11 +32,17 @@ public:
 
 	bool TryBreakDoor();
 
+	/// <summary>
+	/// Breaks the door, handles all logic for getting door to broken state
+	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent)
-	void BreakDoor();//Handles setting bIsBroken, Widget Image, and any animations for breaking.
+	void BreakDoor();
 
+	/// <summary>
+	/// Attempts to fix door, handles all logic and QTE's for attempting to fix door. Fixes door if QTE is completed
+	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent)
-	void FixDoor(); //Handles setting bIsBroken, Widget Image, and any quick time events for fixing.
+	void FixDoor();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OpenManually();
@@ -52,4 +58,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int DoorCode;
+
+	/// <summary>
+	/// Location Widget to open/close doors will appear at on the monitors/tablet
+	/// </summary>
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UChildActorComponent* DoorWidgetLocation;
 };

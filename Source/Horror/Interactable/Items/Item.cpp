@@ -2,14 +2,15 @@
 
 
 #include "Item.h"
-#include "Horror/HorrorCharacter.h"
-#include "Horror/InventoryComponent.h"
+#include "Horror/Characters/HorrorCharacter.h"
+#include "Horror/Interactable/Items/InventoryComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/BillboardComponent.h"
 
 AItem::AItem()
 {
+	//Set Absolute Rotation and Location so billboards do not rotate with the item.
 	OuterBillboard->SetUsingAbsoluteRotation(true);
 	OuterBillboard->SetUsingAbsoluteLocation(true);
 
@@ -35,6 +36,7 @@ void AItem::Pickup_Implementation()
 
 void AItem::Drop_Implementation()
 {
+	//Timer is set to check if Interaction UI can be turned back on
 	GetWorldTimerManager().SetTimer(CheckVelocityHandle, this, &AItem::CheckVelocity, 0.2f, true);
 }
 
@@ -52,7 +54,6 @@ void AItem::StartLookAt_Implementation(APlayerController* PlayerController)
 {
 	if (ActiveInteractionWidget)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, "TakenOff");
 		ActiveInteractionWidget->RemoveFromParent();
 		ActiveInteractionWidget = nullptr;
 	}
@@ -78,7 +79,6 @@ void AItem::StartLookAt_Implementation(APlayerController* PlayerController)
 
 		if (ActiveInteractionWidget)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, "PutOn");
 			ActiveInteractionWidget->AddToViewport();
 		}
 	}

@@ -1,22 +1,28 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+//Project Includes
+#include "Horror/Characters/HorrorCharacter.h"
+#include "Horror/Interactable/Interactable.h"
+#include "Horror/Interactable/Items/Item.h"
+#include "Horror/Interactable/Items/InventoryComponent.h"
+#include "Horror/Characters/EnemyCharacter.h"
 
-#include "HorrorCharacter.h"
-#include "GameFramework/SpringArmComponent.h"
+//Engine Includes
 #include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "Interactable.h"
 #include "InputMappingContext.h"
-#include "Kismet/GameplayStatics.h"
 #include "InputAction.h"
-#include "GameFramework/CharacterMovementComponent.h"
+
 #include "Perception/AIPerceptionSystem.h"
 #include "Perception/AIPerceptionComponent.h"
+
 #include "Kismet/KismetMathLibrary.h"
-#include "Horror/InventoryComponent.h"
-#include "Horror/Item.h"
-#include "EnemyCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AHorrorCharacter::AHorrorCharacter()
@@ -24,7 +30,6 @@ AHorrorCharacter::AHorrorCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Create Spring Arm
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	SpringArmComp->SetupAttachment(GetMesh());
 	SpringArmComp->SetRelativeLocation(FVector(-10.0f, 0.0f, 60.0f));
@@ -34,13 +39,11 @@ AHorrorCharacter::AHorrorCharacter()
 	SpringArmComp->CameraRotationLagSpeed = 20.0f;
 	SpringArmComp->TargetArmLength = 0.0f;
 
-	// Create a CameraComponent	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	CameraComponent->AttachToComponent(SpringArmComp, FAttachmentTransformRules::KeepRelativeTransform);
 	CameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f)); // Position the camera
 	CameraComponent->bUsePawnControlRotation = false;
 
-	// Create the arms mesh
 	ArmsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArmsMesh"));
 	ArmsMesh->SetOnlyOwnerSee(true);
 	ArmsMesh->SetupAttachment(CameraComponent);
@@ -196,18 +199,13 @@ void AHorrorCharacter::InteractTrace()
 {
 	FHitResult Hit;
 	FVector Start = CameraComponent->GetComponentLocation();
-	FVector End = Start + CameraComponent->GetForwardVector() * 300.0f;
+	FVector End = Start + CameraComponent->GetForwardVector() * InteractReach;
+
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this); // Ignore the actor performing the trace
-	QueryParams.AddIgnoredActor(UGameplayStatics::GetActorOfClass(this, AEnemyCharacter::StaticClass()));
+	QueryParams.AddIgnoredActor(UGameplayStatics::GetActorOfClass(this, AEnemyCharacter::StaticClass())); //Ignore the chimp, don't ever need to interact with it.
 
-	FCollisionObjectQueryParams ObjectQueryParams;
-	ObjectQueryParams.ObjectTypesToQuery =
-		FCollisionObjectQueryParams::InitType(ECC_WorldDynamic) |
-		FCollisionObjectQueryParams::InitType(ECC_WorldStatic) |
-		FCollisionObjectQueryParams::InitType(ECC_Pawn);  // Exclude custom Sphere type
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_GameTraceChannel1, QueryParams); //Might need to change channel from ECC_Visibility. Depending on what kind of actor we use
+	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_GameTraceChannel1, QueryParams); //ECC_GametraceChannel1 is a custom Interaction Trace channel. All Actors of base Interactable have a collision box set to block this channel
 
 	bool StoppedLookingAt = true;
 
@@ -258,23 +256,12 @@ void AHorrorCharacter::Tick(float DeltaTime)
 		EndRun();
 	}
 
+	//Deplete Stamina if we are running
 	if (bIsRunning)
 	{
 		Stamina = FMath::Max(0.0f, Stamina - DeltaTime);
-		//GEngine->AddOnScreenDebugMessage(
-		//	-1,                      // Unique key (use -1 for new message)
-		//	1.0f,                    // Duration in seconds
-		//	FColor::Yellow,          // Text color
-		//	FString::Printf(TEXT("StaminaRegenCoolDownRemaining: %f"), StaminaRegenCooldownRemaining)
-		//);
-
-		//GEngine->AddOnScreenDebugMessage(
-		//	-1,
-		//	5.0f,
-		//	FColor::Red,
-		//	FString::Printf(TEXT("Stamina: %f"), Stamina)
-		//);
 	}
+	//Regenerate Stamina if we are not running
 	else
 	{
 		Stamina = FMath::Min(MaxStamina, Stamina + DeltaTime * StaminaRegenRate);
@@ -424,10 +411,13 @@ void AHorrorCharacter::InteractWithHiding(AHidingSpot* hidingSpot)
 
 UAISense_Sight::EVisibilityResult AHorrorCharacter::CanBeSeenFrom(const FCanBeSeenFromContext& Context, FVector& OutSeenLocation, int32& OutNumberOfLoSChecksPerformed, int32& OutNumberOfAsyncLosCheckRequested, float& OutSightStrength, int32* UserData, const FOnPendingVisibilityQueryProcessedDelegate* Delegate)
 {
-	/* If I add a mesh to the character use this */
+	/* If I add a mesh to the character use this so we can only be detected from our head socket, not the entire body. Better game feel if we only get detected if have the ability to see the enemy */
 	//FVector SightTargetLocation = GetMesh()->GetSocketLocation("head");
 
-	FVector SightTargetLocation = GetActorLocation() + FVector(0.0f, 0.0f, 60.0f);
+	FVector SightTargetLocation = GetActorLocation();
+	//Add offset for where the player head would be
+	SightTargetLocation += FVector(0.0f, 0.0f, 60.0f);
+
 	FHitResult HitResult;
 
 	bool HadBlockingHit = GetWorld()->LineTraceSingleByChannel(

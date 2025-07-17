@@ -1,16 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+//Project Includes
 #include "Door.h"
-#include "HorrorCharacter.h"
-#include "Core/CustomGameMode.h"
+#include "Horror/Characters/HorrorCharacter.h"
+#include "Horror/Core/CustomGameMode.h"
+
+//Engine Includes
 #include "Kismet/KismetMathLibrary.h"
-#include "Components/BoxComponent.h"
-#include "PaperSpriteComponent.h"
-#include "Components/BillboardComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
+
+#include "Components/BoxComponent.h"
+#include "Components/BillboardComponent.h"
 #include "Components/SphereComponent.h"
+#include "PaperSpriteComponent.h"
+
+#include "DrawDebugHelpers.h"
 
 ADoor::ADoor()
 {
@@ -48,7 +52,7 @@ void ADoor::BeginPlay()
 void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bIsOverlapping)
+	if (CurrentOverlappingActor)
 	{
 		SetBillboardLocations(CurrentOverlappingActor);
 	}
@@ -90,7 +94,6 @@ void ADoor::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor->IsA(AHorrorCharacter::StaticClass()))
 	{
-		bIsOverlapping = true;
 		CurrentOverlappingActor = OtherActor;
 	}
 
@@ -103,7 +106,6 @@ void ADoor::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	{
 		if (OverlappedComponent == OuterInteractSphere)
 		{
-			bIsOverlapping = false;
 			CurrentOverlappingActor = nullptr;
 		}
 	}
@@ -111,6 +113,10 @@ void ADoor::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	Super::OnSphereEndOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
 }
 
+/// <summary>
+/// Sets location of Outer & Inner Interaction Billboard based on OtherActors location.
+/// </summary>
+/// <param name="OtherActor"></param>
 void ADoor::SetBillboardLocations(AActor* OtherActor)
 {
 	FVector DirectionToOtherActor = OtherActor->GetActorLocation() - Door->GetComponentLocation();
@@ -124,11 +130,13 @@ void ADoor::SetBillboardLocations(AActor* OtherActor)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Actor: %s"), *OtherActor->GetName()));
 	}
 
+	//If we are infront of the door
 	if (dotProduct > 0.0f)
 	{
 		OuterBillboard->SetWorldLocation(FrontInteractionLocation->GetComponentLocation());
 		InnerBillboard->SetWorldLocation(FrontInteractionLocation->GetComponentLocation());
 	}
+	//If we are behind the door
 	else
 	{
 		OuterBillboard->SetWorldLocation(BackInteractionLocation->GetComponentLocation());

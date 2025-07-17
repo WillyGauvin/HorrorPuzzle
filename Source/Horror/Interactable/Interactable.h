@@ -28,29 +28,48 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/// <summary>
+	/// Widget class to show when Character is able to interact with
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> InteractionWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UUserWidget* ActiveInteractionWidget;
 
+	/// <summary>
+	/// Called when otherActor interacts with
+	/// </summary>
+	/// <param name="otherActor"> Actor Interacting with</param>
+	/// <returns></returns>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	FString InteractWith(AActor* otherActor);
 
 	virtual FString InteractWith_Implementation(AActor* otherActor);
 
+	/// <summary>
+	/// Called when Character looks at
+	/// </summary>
+	/// <param name="PlayerController"></param>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StartLookAt(APlayerController* PlayerController);
 
 	virtual void StartLookAt_Implementation(APlayerController* PlayerController);
 
+	/// <summary>
+	/// Called when Character looks away from
+	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StopLookAt();
 
+	virtual void StopLookAt_Implementation();
+
+	/// <summary>
+	/// Force reload of Interaction Widgets. Used when Widgets are changed while Interactable is being looked at
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void ReloadWidget();
 
-	virtual void StopLookAt_Implementation();
 
 	FString ID = "";
 
@@ -58,15 +77,27 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBoxComponent* InteractionBox;
 
+	/// <summary>
+	/// Trigger for displaying outer interaction prompts
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USphereComponent* OuterInteractSphere;
 
+	/// <summary>
+	/// Trigger for displaying inner interaction prompts
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USphereComponent* InnerInteractSphere;
 
+	/// <summary>
+	/// Outer interaction prompt
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBillboardComponent* OuterBillboard;
 
+	/// <summary>
+	/// Inner interaction prompt
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBillboardComponent* InnerBillboard;
 
@@ -88,6 +119,10 @@ public:
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex);
 
+	/// <summary>
+	/// Manually change if actor can be interacted with
+	/// </summary>
+	/// <param name="isInteractable"></param>
 	UFUNCTION(BlueprintCallable)
 	void SetInteractability(bool isInteractable);
 

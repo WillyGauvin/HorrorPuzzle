@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+//Project Includes
 #include "ControllableDoor.h"
-#include "Core/CustomGameMode.h"
+#include "Horror/Core/CustomGameMode.h"
+
+//Engine Includes
 #include "Components/ChildActorComponent.h"
 
 
@@ -25,19 +27,20 @@ bool AControllableDoor::TryBreakDoor()
 
 	int randInt = FMath::RandRange(1, 100);
 
-	GEngine->AddOnScreenDebugMessage(
-		-1,                      // Unique key (use -1 for new message)
-		1.0f,                    // Duration in seconds
-		FColor::Yellow,          // Text color
-		FString::Printf(TEXT("DoorOpenCount: %d"), GetWorld()->GetAuthGameMode<ACustomGameMode>()->GetDoorsOpenedWithoutBreak())
-	);
+	//Debug for chance doors have of breaking
+	//GEngine->AddOnScreenDebugMessage(
+	//	-1,                      // Unique key (use -1 for new message)
+	//	1.0f,                    // Duration in seconds
+	//	FColor::Yellow,          // Text color
+	//	FString::Printf(TEXT("DoorOpenCount: %d"), GetWorld()->GetAuthGameMode<ACustomGameMode>()->GetDoorsOpenedWithoutBreak())
+	//);
 
-	GEngine->AddOnScreenDebugMessage(
-		-1,                      // Unique key (use -1 for new message)
-		1.0f,                    // Duration in seconds
-		FColor::Yellow,          // Text color
-		FString::Printf(TEXT("ChanceToBreak: %d"), ChanceToBreak)
-	);
+	//GEngine->AddOnScreenDebugMessage(
+	//	-1,                      // Unique key (use -1 for new message)
+	//	1.0f,                    // Duration in seconds
+	//	FColor::Yellow,          // Text color
+	//	FString::Printf(TEXT("ChanceToBreak: %d"), ChanceToBreak)
+	//);
 
 	if (randInt <= ChanceToBreak) // Door is broken
 	{

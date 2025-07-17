@@ -1,22 +1,25 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+//Project Includes
 
+//Engine Includes
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Perception/AISightTargetInterface.h"
 #include "HorrorCharacter.generated.h"
 
+class AInteractable;
+class AItem;
+class UInventoryComponent;
+
 class UCameraComponent;
 class USpringArmComponent;
+
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
-class AInteractable;
 struct FInputActionInstance;
-class AHidingSpot;
-class AItem;
-class UInventoryComponent;
 
 UCLASS()
 class HORROR_API AHorrorCharacter : public ACharacter, public IAISightTargetInterface
@@ -26,6 +29,11 @@ class HORROR_API AHorrorCharacter : public ACharacter, public IAISightTargetInte
 public:
 	// Sets default values for this character's properties
 	AHorrorCharacter();
+
+	/** Returns Mesh1P subobject **/
+	USkeletalMeshComponent* GetMesh1P() const { return ArmsMesh; }
+	/** Returns FirstPersonCameraComponent subobject **/
+	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
 
 #pragma region CoreComponents
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
@@ -51,6 +59,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* InventoryMappingContext;
+
 #pragma endregion
 
 #pragma region Actions
@@ -127,15 +136,81 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Inventory;
-#pragma endregion Actions
+#pragma endregion
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
-	USoundBase* WhistleCue;
+#pragma region Interaction
 
+	/// <summary>
+	/// How far the player can reach to interact with objects
+	/// </summary>
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float InteractReach = 300.0f;
+	/// <summary>
+	/// Called in Tick, detects if player is looking at an actor of type Interactable. Assigns LookAtActor if so
+	/// </summary>
+	void InteractTrace();
+
+	/// <summary>
+	/// Actor of base Interactable player is currently looking at
+	/// </summary>
+	AInteractable* LookAtActor = nullptr;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void EnterMonitor(FTransform ViewLocation);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExitMonitor();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnterHiding();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ExitHiding();
+
+	UFUNCTION(BlueprintCallable)
+	void InteractWithHiding(AHidingSpot* hidingSpot);
+
+	/// <summary>
+	/// Reference to hiding spot player is currently in. Null is no hiding spot.
+	/// </summary>
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AHidingSpot* HidingSpot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsHiding = false;
+
+#pragma endregion
+
+#pragma region Items
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AItem* HeldItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UInventoryComponent* InventoryComponent;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void HoldItem(AItem* ItemToHold);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void DropItem();
+
+
+#pragma endregion
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float WalkSpeed = 250.0f;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float RunSpeed = 450.0f;
+
+#pragma region Input Action Bound Functions
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Pause();
@@ -144,8 +219,22 @@ protected:
 	void Interact(const FInputActionValue& Value);
 	void Exit(const FInputActionValue& Value);
 	void Whistle(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnterTablet();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ExitTablet();
+
 	void StartRun();
 	void EndRun();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartCrouch();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndCrouch();
+
 	void SwitchCamera0();
 	void SwitchCamera1();
 	void SwitchCamera2();
@@ -157,11 +246,6 @@ protected:
 	void SwitchCamera8();
 	void SwitchCamera9();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void StartCrouch();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void EndCrouch();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Peek();
@@ -170,6 +254,7 @@ protected:
 
 	void HoldItemAction();
 	void ReleaseItemAction();
+
 	void CancelItemAction();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -178,21 +263,24 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SwitchCameraIndex(int CameraIndex);
 
+#pragma endregion
+
+#pragma region Whistle
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayWhistle();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanWhistle = true;
 
-	void InteractTrace();
-	AInteractable* LookAtActor = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Sounds, meta = (AllowPrivateAccess = "true"))
+	USoundBase* WhistleCue;
 
-	// APawn interface
+#pragma endregion
+
+#pragma region Controls
 
 	virtual void NotifyControllerChanged() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-
-	// End of APawn interface
 
 	UFUNCTION(BlueprintCallable)
 	void SwitchToDefaultControls();
@@ -206,11 +294,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SwitchToInventoryControls();
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float WalkSpeed = 250.0f;
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float RunSpeed = 450.0f;
-
+#pragma endregion
 
 #pragma region Stamina
 
@@ -230,64 +314,8 @@ protected:
 
 #pragma endregion
 
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return ArmsMesh; }
-	/** Returns FirstPersonCameraComponent subobject **/
-	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void EnterMonitor(FTransform ViewLocation);
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void ExitMonitor();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void EnterTablet();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void ExitTablet();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void EnterHiding();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void ExitHiding();
-
-	UFUNCTION(BlueprintCallable)
-	void InteractWithHiding(AHidingSpot* hidingSpot);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AHidingSpot* HidingSpot;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsHiding = false;
-
-#pragma region Items
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AItem* HeldItem;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UInventoryComponent* InventoryComponent;
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void HoldItem(AItem* ItemToHold);
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void DropItem();
-
-
-#pragma endregion Items
-
-
-
-
 private:
+
 	virtual UAISense_Sight::EVisibilityResult CanBeSeenFrom(
 		const FCanBeSeenFromContext& Context,
 		FVector& OutSeenLocation,

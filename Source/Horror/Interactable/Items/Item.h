@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interactable.h"
+#include "Horror/Interactable/Interactable.h"
 #include "Item.generated.h"
 
 /**
@@ -19,6 +19,10 @@ public:
 	AItem();
 
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void StartLookAt_Implementation(APlayerController* PlayerController) override;
+
+	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void HoldAction();
@@ -39,6 +43,9 @@ public:
 
 	virtual void Drop_Implementation();
 
+	/// <summary>
+	/// Check Velocity of the Item, Interaction UI won't show up if item is moving
+	/// </summary>
 	UFUNCTION()
 	void CheckVelocity();
 
@@ -47,21 +54,22 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bIsBeingHeld = false;
 
+	/// <summary>
+	/// Maximum amount of item type the player can hold in inventory
+	/// </summary>
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxInInventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* InventoryIcon;
 
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> CanPickupWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> CannotPickupWidgetClass;
-
-	virtual void StartLookAt_Implementation(APlayerController* PlayerController) override;
-
-	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector InteractionBillboardOffset;
