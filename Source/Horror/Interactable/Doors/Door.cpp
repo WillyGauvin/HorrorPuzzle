@@ -21,6 +21,8 @@ ADoor::ADoor()
 	Frame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Frame"));
 	Frame->SetupAttachment(RootComponent);
 
+	Frame->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+
 	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
 	Door->SetupAttachment(Frame);
 
