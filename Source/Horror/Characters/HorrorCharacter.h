@@ -31,21 +31,21 @@ public:
 	AHorrorCharacter();
 
 	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return ArmsMesh; }
+	//USkeletalMeshComponent* GetMesh1P() const { return ArmsMesh; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
 
 #pragma region CoreComponents
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* ArmsMesh;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	//USkeletalMeshComponent* ArmsMesh;
 
-	/* Spring Arm */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArmComp;
+	///* Spring Arm */
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	//USpringArmComponent* SpringArmComp;
 
 	/** First person camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
