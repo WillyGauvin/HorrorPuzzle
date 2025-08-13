@@ -29,27 +29,28 @@ AHorrorCharacter::AHorrorCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bUseControllerRotationYaw = true;
 
-	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-	SpringArmComp->SetupAttachment(GetMesh());
-	SpringArmComp->SetRelativeLocation(FVector(-10.0f, 0.0f, 60.0f));
-	SpringArmComp->bUsePawnControlRotation = true;
-	SpringArmComp->bEnableCameraLag = true;
-	SpringArmComp->bEnableCameraRotationLag = true;
-	SpringArmComp->CameraRotationLagSpeed = 20.0f;
-	SpringArmComp->TargetArmLength = 0.0f;
+	//SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
+	//SpringArmComp->SetupAttachment(GetMesh());
+	//SpringArmComp->SetRelativeLocation(FVector(-10.0f, 0.0f, 60.0f));
+	//SpringArmComp->bUsePawnControlRotation = true;
+	//SpringArmComp->bEnableCameraLag = true;
+	//SpringArmComp->bEnableCameraRotationLag = true;
+	//SpringArmComp->CameraRotationLagSpeed = 20.0f;
+	//SpringArmComp->TargetArmLength = 0.0f;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	CameraComponent->AttachToComponent(SpringArmComp, FAttachmentTransformRules::KeepRelativeTransform);
-	CameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f)); // Position the camera
-	CameraComponent->bUsePawnControlRotation = false;
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
+	CameraComponent->SetupAttachment(GetMesh(), FName("head"));
+	CameraComponent->bUsePawnControlRotation = true;
 
-	ArmsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArmsMesh"));
-	ArmsMesh->SetOnlyOwnerSee(true);
-	ArmsMesh->SetupAttachment(CameraComponent);
-	ArmsMesh->bCastDynamicShadow = false;
-	ArmsMesh->CastShadow = false;
-	ArmsMesh->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+	//ArmsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArmsMesh"));
+	//ArmsMesh->SetOnlyOwnerSee(true);
+	//ArmsMesh->SetupAttachment(CameraComponent);
+	//ArmsMesh->bCastDynamicShadow = false;
+	//ArmsMesh->CastShadow = false;
+	//ArmsMesh->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
