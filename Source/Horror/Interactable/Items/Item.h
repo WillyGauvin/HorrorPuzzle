@@ -6,6 +6,8 @@
 #include "Horror/Interactable/Interactable.h"
 #include "Item.generated.h"
 
+
+class AHorrorCharacter;
 /**
  *
  */
@@ -24,19 +26,22 @@ public:
 
 	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StopPrediction();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void HoldAction();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ReleaseAction();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CancelAction();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Pickup();
+	void Pickup(AHorrorCharacter* Character);
 
-	virtual void Pickup_Implementation();
+	virtual void Pickup_Implementation(AHorrorCharacter* Character);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Drop();
@@ -53,6 +58,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bIsBeingHeld = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	AHorrorCharacter* MyCharacter;
 
 	/// <summary>
 	/// Maximum amount of item type the player can hold in inventory

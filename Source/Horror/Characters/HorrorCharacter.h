@@ -33,6 +33,7 @@ public:
 	/** Returns Mesh1P subobject **/
 	//USkeletalMeshComponent* GetMesh1P() const { return ArmsMesh; }
 	/** Returns FirstPersonCameraComponent subobject **/
+	UFUNCTION(BlueprintCallable)
 	UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
 
 #pragma region CoreComponents
@@ -311,6 +312,15 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float WhistleStaminaCost = 2.0f;
+
+#pragma endregion
+
+#pragma region Animations
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void PlayChargeThrowAnimation();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void PlayThrowAnimation();
 
 #pragma endregion
 

@@ -29,8 +29,9 @@ void AItem::Tick(float DeltaTime)
 	InnerBillboard->SetWorldLocation(BillboardLocation);
 }
 
-void AItem::Pickup_Implementation()
+void AItem::Pickup_Implementation(AHorrorCharacter* Character)
 {
+	MyCharacter = Character;
 	SetInteractability(false);
 }
 
@@ -38,6 +39,7 @@ void AItem::Drop_Implementation()
 {
 	//Timer is set to check if Interaction UI can be turned back on
 	GetWorldTimerManager().SetTimer(CheckVelocityHandle, this, &AItem::CheckVelocity, 0.2f, true);
+	MyCharacter = nullptr;
 }
 
 void AItem::CheckVelocity()

@@ -173,6 +173,7 @@ void AHorrorCharacter::HoldItemAction()
 {
 	if (HeldItem)
 	{
+		PlayChargeThrowAnimation();
 		HeldItem->HoldAction();
 	}
 }
@@ -181,7 +182,8 @@ void AHorrorCharacter::ReleaseItemAction()
 {
 	if (HeldItem)
 	{
-		HeldItem->ReleaseAction();
+		PlayThrowAnimation();
+		//HeldItem->ReleaseAction();
 	}
 }
 
