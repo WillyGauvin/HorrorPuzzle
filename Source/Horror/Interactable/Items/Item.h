@@ -22,7 +22,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void StartLookAt_Implementation(APlayerController* PlayerController) override;
+	virtual bool StartLookAt_Implementation(APlayerController* PlayerController) override;
 
 	virtual FString InteractWith_Implementation(AActor* otherActor) override;
 
