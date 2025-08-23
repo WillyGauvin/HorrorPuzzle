@@ -220,6 +220,12 @@ void AHorrorCharacter::InteractTrace()
 		{
 			if (AInteractable* Interactable = Cast<AInteractable>(HitActor))
 			{
+				if (!Interactable->bIsInteractable)
+				{
+					Interactable->StopLookAt();
+					LookAtActor = nullptr;
+					return;
+				}
 				// This covers the case where the player is looking at an interactable and then in the next frame is looking at another interactable.
 				if (LookAtActor != Interactable)
 				{
@@ -227,9 +233,10 @@ void AHorrorCharacter::InteractTrace()
 					{
 						LookAtActor->StopLookAt();
 					}
-					LookAtActor = Interactable;
-
-					LookAtActor->StartLookAt(Cast<APlayerController>(Controller));
+					if (Interactable->StartLookAt(Cast<APlayerController>(Controller)))
+					{
+						LookAtActor = Interactable;
+					}
 				}
 				StoppedLookingAt = false;
 			}

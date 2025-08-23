@@ -52,8 +52,10 @@ void AItem::CheckVelocity()
 }
 
 
-void AItem::StartLookAt_Implementation(APlayerController* PlayerController)
+bool AItem::StartLookAt_Implementation(APlayerController* PlayerController)
 {
+	if (!bIsInteractable) return false;
+
 	if (ActiveInteractionWidget)
 	{
 		ActiveInteractionWidget->RemoveFromParent();
@@ -82,8 +84,10 @@ void AItem::StartLookAt_Implementation(APlayerController* PlayerController)
 		if (ActiveInteractionWidget)
 		{
 			ActiveInteractionWidget->AddToViewport();
+			return true;
 		}
 	}
+	return false;
 }
 
 FString AItem::InteractWith_Implementation(AActor* otherActor)

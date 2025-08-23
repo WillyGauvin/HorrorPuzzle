@@ -157,7 +157,7 @@ public:
 	AInteractable* LookAtActor = nullptr;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void EnterMonitor(FTransform ViewLocation);
+	void EnterMonitor(AActor* viewTarget);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ExitMonitor();

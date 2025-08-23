@@ -83,8 +83,10 @@ FString AInteractable::InteractWith_Implementation(AActor* otherActor)
 	return ID;
 }
 
-void AInteractable::StartLookAt_Implementation(APlayerController* PlayerController)
+bool AInteractable::StartLookAt_Implementation(APlayerController* PlayerController)
 {
+	if (!bIsInteractable) return false;
+
 	//Reset Widget in case of widget changes between interactions
 	if (ActiveInteractionWidget)
 	{
@@ -99,8 +101,10 @@ void AInteractable::StartLookAt_Implementation(APlayerController* PlayerControll
 		if (ActiveInteractionWidget)
 		{
 			ActiveInteractionWidget->AddToViewport();
+			return true;
 		}
 	}
+	return false;
 }
 
 void AInteractable::ReloadWidget()
@@ -185,6 +189,7 @@ void AInteractable::SetInteractability(bool isInteractable)
 	{
 		InnerBillboard->SetVisibility(false);
 		OuterBillboard->SetVisibility(false);
+		StopLookAt_Implementation();
 	}
 
 

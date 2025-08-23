@@ -52,9 +52,9 @@ public:
 	/// </summary>
 	/// <param name="PlayerController"></param>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StartLookAt(APlayerController* PlayerController);
+	bool StartLookAt(APlayerController* PlayerController);
 
-	virtual void StartLookAt_Implementation(APlayerController* PlayerController);
+	virtual bool StartLookAt_Implementation(APlayerController* PlayerController);
 
 	/// <summary>
 	/// Called when Character looks away from
